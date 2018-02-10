@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using DShop.Common.Builders;
 
 namespace DShop.Services.Products
 {
@@ -17,9 +18,17 @@ namespace DShop.Services.Products
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
+        public static IWebHost BuildWebHost(string[] args) =>           
+            ServiceBuilder
+                .Create<Startup>(args)
+                .WithPort(5001)
+                .WithRegistration(containerBuilder => 
+                {
+                })
+                .WithMongoDb("mongo")
+                .WithServiceBus("service-bus", subscribeBus => 
+                {
+                })
                 .Build();
     }
 }
