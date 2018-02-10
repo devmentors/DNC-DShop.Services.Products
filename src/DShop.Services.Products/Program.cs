@@ -22,7 +22,7 @@ namespace DShop.Services.Products
             ServiceBuilder
                 .Create<Startup>(args)
                 .WithPort(5001)
-                .WithRegistration(containerBuilder => 
+                .WithAutofac(containerBuilder => 
                 {
                 })
                 .WithMongoDb("mongo")
