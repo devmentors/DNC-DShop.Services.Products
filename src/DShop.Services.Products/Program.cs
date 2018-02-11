@@ -3,6 +3,7 @@ using DShop.Common.Builders;
 using Autofac;
 using DShop.Services.Products.Repositories;
 using DShop.Services.Products.Services;
+using DShop.Messages.Commands.Products;
 
 namespace DShop.Services.Products
 {
@@ -25,6 +26,7 @@ namespace DShop.Services.Products
                 .WithMongoDb("mongo")
                 .WithServiceBus("service-bus", subscribeBus => 
                 {
+                    subscribeBus.SubscribeToCommand<CreateProduct>();
                 })
                 .Build();
     }

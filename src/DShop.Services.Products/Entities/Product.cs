@@ -15,7 +15,7 @@ namespace DShop.Services.Products.Entities
             :base(id)
         {
             Vendor = vendor;
-            SetName(name);
+            SetName(name); 
             SetDescription(description);
             SetPrice(price);
         }
