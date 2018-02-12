@@ -19,7 +19,7 @@ namespace DShop.Services.Products.Handlers
 
         public async Task HandleAsync(CreateProduct command, ICorrelationContext context)
         {
-            await _productsService.CreateAsync(command.Id, command.Name, command.Descirption, command.Vendor, command.Price);
+            await _productsService.CreateAsync(command.Id, command.Name, command.Description, command.Vendor, command.Price);
         }
     }
 }

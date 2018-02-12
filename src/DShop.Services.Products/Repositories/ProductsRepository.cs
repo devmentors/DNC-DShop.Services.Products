@@ -6,7 +6,7 @@ namespace DShop.Services.Products.Repositories
 {
 	public class ProductsRepository : MongoRepository<Product>, IProductsRepository
 	{
-		protected ProductsRepository(IMongoDatabase database) : base(database, "Products")
+		public ProductsRepository(IMongoDatabase database) : base(database, "Products")
 		{
 		}
 	}

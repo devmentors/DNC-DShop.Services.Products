@@ -4,6 +4,8 @@ using Autofac;
 using DShop.Services.Products.Repositories;
 using DShop.Services.Products.Services;
 using DShop.Messages.Commands.Products;
+using DShop.Services.Products.Handlers;
+using DShop.Common.Handlers;
 
 namespace DShop.Services.Products
 {
@@ -22,6 +24,7 @@ namespace DShop.Services.Products
                 {
                     containerBuilder.RegisterType<ProductsRepository>().As<IProductsRepository>();
                     containerBuilder.RegisterType<ProductsService>().As<IProductsService>();
+                    containerBuilder.RegisterType<CreateProductCommandHandler>().As<ICommandHandler<CreateProduct>>();
                 })
                 .WithMongoDb("mongo")
                 .WithServiceBus("service-bus", subscribeBus => 
