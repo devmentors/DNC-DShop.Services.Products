@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DShop.Services.Products.Handlers
 {
-    public sealed class CreateProductCommandHandler : ICommandHandler<CreateProduct>
+    public sealed class CreateProductHandler : ICommandHandler<CreateProduct>
     {
         private readonly IProductsService _productsService;
         private readonly IPublishBus _publishBus;
 
-        public CreateProductCommandHandler(IProductsService productsService, IPublishBus publishBus)
+        public CreateProductHandler(IProductsService productsService, IPublishBus publishBus)
         {
             _productsService = productsService;
             _publishBus = publishBus;

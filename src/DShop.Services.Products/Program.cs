@@ -24,12 +24,17 @@ namespace DShop.Services.Products
                 {
                     containerBuilder.RegisterType<ProductsRepository>().As<IProductsRepository>();
                     containerBuilder.RegisterType<ProductsService>().As<IProductsService>();
-                    containerBuilder.RegisterType<CreateProductCommandHandler>().As<ICommandHandler<CreateProduct>>();
+
+                    containerBuilder.RegisterType<CreateProductHandler>().As<ICommandHandler<CreateProduct>>();
+                    containerBuilder.RegisterType<UpdateProductHandler>().As<ICommandHandler<UpdateProduct>>();
+                    containerBuilder.RegisterType<DeleteProductHandler>().As<ICommandHandler<DeleteProduct>>();
                 })
                 .WithMongoDb("mongo")
                 .WithServiceBus("service-bus", subscribeBus => 
                 {
                     subscribeBus.SubscribeToCommand<CreateProduct>();
+                    subscribeBus.SubscribeToCommand<UpdateProduct>();
+                    subscribeBus.SubscribeToCommand<DeleteProduct>();
                 })
                 .Build();
     }

@@ -1,3 +1,4 @@
+using DShop.Common.Types;
 using DShop.Services.Products.Entities;
 using DShop.Services.Products.Repositories;
 using System;
@@ -23,6 +24,11 @@ namespace DShop.Services.Products.Services
         public async Task UpdateAsync(Guid id, string name, string description, decimal price)
         {
             var product = await _productsRepository.GetByIdAsync(id);
+
+            if(product == null)
+            {
+                throw new DShopException("Maybe we shall introduce some maybe pattern or derviced exceptions?");
+            }
 
             product.SetName(name);
             product.SetDescription(description);
