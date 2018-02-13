@@ -1,7 +1,9 @@
 using DShop.Common.Types;
+using DShop.Messages.ReadModels;
 using DShop.Services.Products.Entities;
 using DShop.Services.Products.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DShop.Services.Products.Services
@@ -15,6 +17,15 @@ namespace DShop.Services.Products.Services
             _productsRepository = productsRepository;
         }
 
+        public async Task<ProductDetailsReadModel> GetProductDetailsAsync(Guid id)
+            => await _productsRepository.GetProductDetailsAsync(id);
+
+        public async Task<IEnumerable<ProductReadModel>> GetAllProductsAsync()
+            => await _productsRepository.GetFilteredProductsAsync(p => true);
+
+        public Task<IEnumerable<ProductReadModel>> GetProductsByVendorAsync(string vendor)
+            => _productsRepository.GetFilteredProductsAsync(p => p.Vendor == vendor);
+
         public async Task CreateAsync(Guid id, string name, string description, string vendor, decimal price)
         {
             var product = new Product(id, name, description, vendor, price);
@@ -27,7 +38,7 @@ namespace DShop.Services.Products.Services
 
             if(product == null)
             {
-                throw new DShopException("Maybe we shall introduce some maybe pattern or derviced exceptions?");
+                throw new DShopException("Maybe we shall introduce some maybe pattern or derived exceptions?");
             }
 
             product.SetName(name);

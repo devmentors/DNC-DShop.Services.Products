@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using DShop.Messages.ReadModels;
 using DShop.Services.Products.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,5 +16,17 @@ namespace DShop.Services.Products.Controllers
         {
             _productsService = productsService;
         }
+
+        [HttpGet("{id}/Details")]
+        public async Task<ProductDetailsReadModel> GetProductDetailsAsync(Guid id)
+            => await _productsService.GetProductDetailsAsync(id);
+
+        [HttpGet("All")]
+        public async Task<IEnumerable<ProductReadModel>> GetAllProductsAsync()
+            => await _productsService.GetAllProductsAsync();
+
+        [HttpGet("Filtered")]
+        public Task<IEnumerable<ProductReadModel>> GetProductsByVendorAsync([FromQuery] string vendor)
+            => _productsService.GetProductsByVendorAsync(vendor);
     }
 }
