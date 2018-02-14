@@ -15,6 +15,8 @@ namespace DShop.Services.Products.Controllers
         public ProductsController(IProductsService productsService)
         {
             _productsService = productsService;
+            dynamic a = 2;
+            a.GetType();
         }
 
         [HttpGet("{id}/Details")]
@@ -26,7 +28,7 @@ namespace DShop.Services.Products.Controllers
             => await _productsService.GetAllProductsAsync();
 
         [HttpGet("Filtered")]
-        public Task<IEnumerable<ProductReadModel>> GetProductsByVendorAsync([FromQuery] string vendor)
-            => _productsService.GetProductsByVendorAsync(vendor);
+        public async Task<IEnumerable<ProductReadModel>> GetProductsByVendorAsync([FromQuery] string vendor)
+            => await _productsService.GetProductsByVendorAsync(vendor);
     }
 }
