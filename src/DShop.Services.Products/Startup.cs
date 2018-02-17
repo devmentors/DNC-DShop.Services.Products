@@ -1,44 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using DShop.Common.Bus.RabbitMq;
+using DShop.Common.Databases.Mongo;
+using DShop.Common.Mvc;
+using DShop.Messages.Commands.Products;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using DShop.Common.Builders;
 
 namespace DShop.Services.Products
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public IContainer Container { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddDefaultJsonOptions();
+            var builder = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
+                    .AsImplementedInterfaces();
+            builder.Populate(services);
+            builder.AddRabbitMq();
+            builder.AddMongoDB();
+            Container = builder.Build();
 
-            var serviceProvider = ServiceBuilder.GetServiceProvider(services);
-            return serviceProvider;
+            return new AutofacServiceProvider(Container);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+            IApplicationLifetime applicationLifetime)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.EnvironmentName == "local")
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseMvc();
+            app.UseRabbitMq()
+                .SubscribeCommand<CreateProduct>()
+                .SubscribeCommand<UpdateProduct>()
+                .SubscribeCommand<DeleteProduct>();
+
+            applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }
     }
 }
