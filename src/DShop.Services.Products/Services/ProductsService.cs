@@ -1,9 +1,8 @@
 using DShop.Common.Types;
-using DShop.Messages.ReadModels;
+using DShop.Services.Products.Dtos;
 using DShop.Services.Products.Entities;
 using DShop.Services.Products.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DShop.Services.Products.Services
@@ -17,14 +16,8 @@ namespace DShop.Services.Products.Services
             _productsRepository = productsRepository;
         }
 
-        public async Task<ProductDetailsReadModel> GetProductDetailsAsync(Guid id)
-            => await _productsRepository.GetProductDetailsAsync(id);
-
-        public async Task<IEnumerable<ProductReadModel>> GetAllProductsAsync()
-            => await _productsRepository.GetFilteredProductsAsync(p => true);
-
-        public Task<IEnumerable<ProductReadModel>> GetProductsByVendorAsync(string vendor)
-            => _productsRepository.GetFilteredProductsAsync(p => p.Vendor == vendor);
+        public async Task<ProductDto> GetProductByIdAsync(Guid id)
+            => await _productsRepository.GetProductByIdAsync(id);
 
         public async Task CreateAsync(Guid id, string name, string description, string vendor, decimal price)
         {
