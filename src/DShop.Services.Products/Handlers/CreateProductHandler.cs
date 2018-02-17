@@ -1,6 +1,7 @@
 ﻿using DShop.Common.Bus;
 using DShop.Common.Handlers;
 using DShop.Messages.Commands.Products;
+using DShop.Messages.Events.Products;
 using DShop.Services.Products.Services;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace DShop.Services.Products.Handlers
         public async Task HandleAsync(CreateProduct command, ICorrelationContext context)
         {
             await _productsService.CreateAsync(command.Id, command.Name, command.Description, command.Vendor, command.Price);
+            await _publishBus.PublishEventAsync(new ProductCreated(context.ResourceId, context.UserId));
         }
     }
 }

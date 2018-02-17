@@ -1,6 +1,7 @@
 ﻿using DShop.Common.Bus;
 using DShop.Common.Handlers;
 using DShop.Messages.Commands.Products;
+using DShop.Messages.Events.Products;
 using DShop.Services.Products.Services;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace DShop.Services.Products.Handlers
         public async Task HandleAsync(DeleteProduct command, ICorrelationContext context)
         {
             await _productsService.DeleteAsync(command.Id);
+            await _publishBus.PublishEventAsync(new ProductDeleted(context.ResourceId, context.UserId));
         }
     }
 }
