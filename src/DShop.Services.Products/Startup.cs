@@ -2,9 +2,9 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using DShop.Common.Bus.RabbitMq;
-using DShop.Common.Databases.Mongo;
+using DShop.Common.Mongo;
 using DShop.Common.Mvc;
+using DShop.Common.RabbitMq;
 using DShop.Messages.Commands.Products;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,30 +15,33 @@ namespace DShop.Services.Products
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-        public IContainer Container { get; private set; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        public IConfiguration Configuration { get; }
+        public IContainer Container { get; private set; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddDefaultJsonOptions();
+
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
+
             builder.Populate(services);
             builder.AddRabbitMq();
             builder.AddMongoDB();
-            Container = builder.Build();
 
+            Container = builder.Build();
             return new AutofacServiceProvider(Container);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
-            IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment() || env.EnvironmentName == "local")
             {

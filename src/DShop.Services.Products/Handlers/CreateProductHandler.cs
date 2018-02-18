@@ -1,5 +1,5 @@
-﻿using DShop.Common.Bus;
-using DShop.Common.Handlers;
+﻿using DShop.Common.Handlers;
+using DShop.Common.RabbitMq;
 using DShop.Messages.Commands.Products;
 using DShop.Messages.Events.Products;
 using DShop.Services.Products.Services;
@@ -10,18 +10,18 @@ namespace DShop.Services.Products.Handlers
     public sealed class CreateProductHandler : ICommandHandler<CreateProduct>
     {
         private readonly IProductsService _productsService;
-        private readonly IPublishBus _publishBus;
+        private readonly IBusPublisher _busPublisher;
 
-        public CreateProductHandler(IProductsService productsService, IPublishBus publishBus)
+        public CreateProductHandler(IProductsService productsService, IBusPublisher busPublisher)
         {
             _productsService = productsService;
-            _publishBus = publishBus;
+            _busPublisher = busPublisher;
         }
 
         public async Task HandleAsync(CreateProduct command, ICorrelationContext context)
         {
             await _productsService.CreateAsync(command.Id, command.Name, command.Description, command.Vendor, command.Price);
-            await _publishBus.PublishEventAsync(new ProductCreated(context.ResourceId, context.UserId));
+            await _busPublisher.PublishEventAsync(new ProductCreated(context.ResourceId, context.UserId));
         }
     }
 }

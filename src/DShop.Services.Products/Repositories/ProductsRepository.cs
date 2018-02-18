@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using DShop.Common.Databases.Mongo;
+using DShop.Common.Mongo;
 using DShop.Services.Products.Dtos;
 using DShop.Services.Products.Entities;
 using DShop.Services.Products.Extensions;
