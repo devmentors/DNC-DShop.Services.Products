@@ -21,7 +21,7 @@ namespace DShop.Services.Products.Handlers
         public async Task HandleAsync(CreateProduct command, ICorrelationContext context)
         {
             await _productsService.CreateAsync(command.Id, command.Name, command.Description, command.Vendor, command.Price);
-            await _busPublisher.PublishEventAsync(new ProductCreated(context.ResourceId, context.UserId));
+            await _busPublisher.PublishEventAsync(new ProductCreated(command.Id, context.UserId));
         }
     }
 }

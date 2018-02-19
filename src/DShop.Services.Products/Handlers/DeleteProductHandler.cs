@@ -21,7 +21,7 @@ namespace DShop.Services.Products.Handlers
         public async Task HandleAsync(DeleteProduct command, ICorrelationContext context)
         {
             await _productsService.DeleteAsync(command.Id);
-            await _busPublisher.PublishEventAsync(new ProductDeleted(context.ResourceId, context.UserId));
+            await _busPublisher.PublishEventAsync(new ProductDeleted(command.Id, context.UserId));
         }
     }
 }
