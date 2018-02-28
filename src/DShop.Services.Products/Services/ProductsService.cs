@@ -16,8 +16,19 @@ namespace DShop.Services.Products.Services
             _productsRepository = productsRepository;
         }
 
-        public async Task<ProductDto> GetProductByIdAsync(Guid id)
-            => await _productsRepository.GetProductByIdAsync(id);
+        public async Task<ProductDto> GetAsync(Guid id)
+        {
+            var product = await _productsRepository.GetAsync(id);
+
+            return product == null ? null : new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Descirption = product.Descirption,
+                Vendor = product.Vendor,
+                Price = product.Price
+            };
+        }
 
         public async Task CreateAsync(Guid id, string name, string description, string vendor, decimal price)
         {
@@ -27,7 +38,7 @@ namespace DShop.Services.Products.Services
 
         public async Task UpdateAsync(Guid id, string name, string description, decimal price)
         {
-            var product = await _productsRepository.GetByIdAsync(id);
+            var product = await _productsRepository.GetAsync(id);
 
             if(product == null)
             {

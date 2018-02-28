@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace DShop.Services.Products.Repositories
 {
-    public interface IProductsRepository : IMongoRepository<Product>
+    public interface IProductsRepository
     {
-        Task<ProductDto> GetProductByIdAsync(Guid id);
+        Task<Product> GetAsync(Guid id);
+        Task CreateAsync(Product product);
+        Task UpdateAsync(Product product);
+        Task DeleteAsync(Guid id);
     }
 }

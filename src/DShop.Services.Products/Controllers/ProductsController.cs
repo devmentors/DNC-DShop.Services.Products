@@ -20,6 +20,6 @@ namespace DShop.Services.Products.Controllers
 
         [HttpGet("{id}")]
         public async Task<ProductDto> GetProductDetailsAsync(Guid id)
-            => await _productsService.GetProductByIdAsync(id);
+            => await _productsService.GetAsync(id);
     }
 }

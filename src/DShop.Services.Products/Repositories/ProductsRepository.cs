@@ -8,16 +8,25 @@ using MongoDB.Driver;
 
 namespace DShop.Services.Products.Repositories
 {
-    public class ProductsRepository : MongoRepository<Product>, IProductsRepository
-	{
-		public ProductsRepository(IMongoDatabase database) : base(database, "Products")
-		{
-		}
+    public class ProductsRepository : IProductsRepository
+    {
+        private readonly IMongoRepository<Product> _repository;
 
-        public async Task<ProductDto> GetProductByIdAsync(Guid id)
-            => await Collection
-                .Find(p => p.Id == id)
-                .AsProductDtos()
-                .SingleOrDefaultAsync();
+        public ProductsRepository(IMongoRepository<Product> repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task<Product> GetAsync(Guid id)
+            => await _repository.GetAsync(id);
+
+        public async Task CreateAsync(Product product)
+            => await _repository.CreateAsync(product);
+
+        public async Task UpdateAsync(Product product)
+            => await _repository.UpdateAsync(product);
+
+        public async Task DeleteAsync(Guid id)
+            => await _repository.DeleteAsync(id);
     }
 }

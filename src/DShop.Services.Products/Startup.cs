@@ -6,6 +6,7 @@ using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
 using DShop.Messages.Commands.Products;
+using DShop.Services.Products.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +37,7 @@ namespace DShop.Services.Products
             builder.Populate(services);
             builder.AddRabbitMq();
             builder.AddMongoDB();
+            builder.AddMongoDBRepository<Product>("Products");
 
             Container = builder.Build();
             return new AutofacServiceProvider(Container);
