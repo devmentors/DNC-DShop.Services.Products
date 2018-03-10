@@ -16,7 +16,7 @@ namespace DShop.Services.Products.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ProductDto> GetProductDetailsAsync(Guid id)
+        public async Task<ProductDto> GetAsync(Guid id)
             => await _productsService.GetAsync(id);
     }
 }
