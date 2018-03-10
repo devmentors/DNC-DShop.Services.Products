@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DShop.Services.Products.Controllers
 {
-    [Route("api/[controller]")]
     public class ProductsController : Controller
     {
         private readonly IProductsService _productsService;
@@ -14,8 +13,6 @@ namespace DShop.Services.Products.Controllers
         public ProductsController(IProductsService productsService)
         {
             _productsService = productsService;
-            dynamic a = 2;
-            a.GetType();
         }
 
         [HttpGet("{id}")]
