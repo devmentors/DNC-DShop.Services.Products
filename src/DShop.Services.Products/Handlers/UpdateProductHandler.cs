@@ -22,7 +22,7 @@ namespace DShop.Services.Products.Handlers
         public async Task HandleAsync(UpdateProduct command, ICorrelationContext context)
         {
             await _productsService.UpdateAsync(command.Id, command.Name, command.Description, command.Price);
-            await _busPublisher.PublishEventAsync(new ProductUpdated(command.Id, context.UserId));
+            await _busPublisher.PublishEventAsync(new ProductUpdated(command.Id), context);
         }
     }
 }
