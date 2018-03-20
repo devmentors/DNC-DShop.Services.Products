@@ -1,6 +1,4 @@
 #!/bin/bash
-dotnet publish --no-restore ./src/DShop.Services.Products -c Release -o ./bin/Docker
-
 DOCKER_ENV=''
 DOCKER_TAG=''
 
