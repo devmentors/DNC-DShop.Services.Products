@@ -3,12 +3,11 @@ using DShop.Common.RabbitMq;
 using DShop.Messages.Commands.Products;
 using DShop.Messages.Events.Products;
 using DShop.Services.Products.Repositories;
-using DShop.Services.Products.Services;
 using System.Threading.Tasks;
 
 namespace DShop.Services.Products.Handlers
 {
-    public class DeleteProductHandler : ICommandHandler<DeleteProduct>
+    public sealed class DeleteProductHandler : ICommandHandler<DeleteProduct>
     {
         private readonly IProductsRepository _productsRepository;
         private readonly IHandler _handler;

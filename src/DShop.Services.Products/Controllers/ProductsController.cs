@@ -1,23 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using DShop.Common.Dispatchers;
 using DShop.Services.Products.Dtos;
-using DShop.Services.Products.Services;
+using DShop.Services.Products.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DShop.Services.Products.Controllers
 {
     [Route("[controller]")]
-    public class ProductsController : Controller
+    public class ProductsController : BaseController
     {
-        private readonly IProductsService _productsService;
-
-        public ProductsController(IProductsService productsService)
+        public ProductsController(IDispatcher dispatcher)
+            :base(dispatcher)
         {
-            _productsService = productsService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ProductDto> GetAsync(Guid id)
-            => await _productsService.GetAsync(id);
+        public async Task<ActionResult<ProductDto>> GetAsync([FromRoute] GetProduct query)
+            => Single(await DispatchAsync<GetProduct, ProductDto>(query));
     }
 }
