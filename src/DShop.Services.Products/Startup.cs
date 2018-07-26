@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
@@ -38,6 +39,7 @@ namespace DShop.Services.Products
             builder.AddRabbitMq();
             builder.AddMongoDB();
             builder.AddMongoDBRepository<Product>("Products");
+            builder.AddDispatchers();
 
             Container = builder.Build();
             return new AutofacServiceProvider(Container);

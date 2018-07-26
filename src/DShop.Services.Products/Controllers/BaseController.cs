@@ -2,9 +2,6 @@
 using DShop.Common.Types;
 using DShop.Messages.Commands;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DShop.Services.Products.Controllers
@@ -34,6 +31,16 @@ namespace DShop.Services.Products.Controllers
             }
 
             return Ok(data);
+        }
+
+        protected ActionResult<PagedResult<T>> Collection<T>(PagedResult<T> pagedResult)
+        {
+            if (pagedResult == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(pagedResult);
         }
     }
 }

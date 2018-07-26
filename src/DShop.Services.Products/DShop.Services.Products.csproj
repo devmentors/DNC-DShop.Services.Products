@@ -4,7 +4,6 @@
     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Queries\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
