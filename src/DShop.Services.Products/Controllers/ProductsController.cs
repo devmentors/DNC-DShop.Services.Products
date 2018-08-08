@@ -16,7 +16,7 @@ namespace DShop.Services.Products.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<ProductDto>>> Get(BrowseProducts query)
+        public async Task<ActionResult<PagedResult<ProductDto>>> Get([FromQuery] BrowseProducts query)
             => Collection(await DispatchAsync<BrowseProducts, PagedResult<ProductDto>>(query));
 
         [HttpGet("{id}")]

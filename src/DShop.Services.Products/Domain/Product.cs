@@ -2,12 +2,12 @@ using DShop.Common.Types;
 using DShop.Messages.Entities;
 using System;
 
-namespace DShop.Services.Products.Entities
+namespace DShop.Services.Products.Domain
 {
     public class Product : BaseEntity
     {
         public string Name { get; protected set; }
-        public string Descirption { get; protected set; }
+        public string Description { get; protected set; }
         public string Vendor { get; protected set; }
         public decimal Price { get; protected set; }
 
@@ -38,7 +38,7 @@ namespace DShop.Services.Products.Entities
                 throw new DShopException("Product description cannot be empty.");
             }
 
-            Descirption = description;
+            Description = description;
             SetUpdatedDate();
         }
 

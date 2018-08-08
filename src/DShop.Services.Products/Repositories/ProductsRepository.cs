@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using DShop.Common.Mongo;
 using DShop.Common.Types;
-using DShop.Services.Products.Entities;
+using DShop.Services.Products.Domain;
 using DShop.Services.Products.Queries;
 
 namespace DShop.Services.Products.Repositories

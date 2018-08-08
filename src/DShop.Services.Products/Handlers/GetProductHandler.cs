@@ -21,7 +21,7 @@ namespace DShop.Services.Products.Handlers
             {
                 Id = product.Id,
                 Name = product.Name,
-                Descirption = product.Descirption,
+                Description = product.Description,
                 Vendor = product.Vendor,
                 Price = product.Price
             };

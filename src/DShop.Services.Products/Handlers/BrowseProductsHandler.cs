@@ -18,17 +18,16 @@ namespace DShop.Services.Products.Handlers
         public async Task<PagedResult<ProductDto>> HandleAsync(BrowseProducts query)
         {
             var pagedResult = await _productsRepository.BrowseAsync(query);
-
-            var productDtos = pagedResult.Items.Select(p => new ProductDto
+            var products = pagedResult.Items.Select(p => new ProductDto
             {
                 Id = p.Id,
                 Name = p.Name,
-                Descirption = p.Descirption,
+                Description = p.Description,
                 Vendor = p.Vendor,
                 Price = p.Price
             }).ToList();
 
-            return PagedResult<ProductDto>.From(pagedResult, productDtos);
+            return PagedResult<ProductDto>.From(pagedResult, products);
         }
     }
 }

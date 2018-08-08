@@ -2,7 +2,7 @@
 using DShop.Common.RabbitMq;
 using DShop.Messages.Commands.Products;
 using DShop.Messages.Events.Products;
-using DShop.Services.Products.Entities;
+using DShop.Services.Products.Domain;
 using DShop.Services.Products.Repositories;
 using System.Threading.Tasks;
 

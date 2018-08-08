@@ -1,5 +1,5 @@
 using DShop.Common.Types;
-using DShop.Services.Products.Entities;
+using DShop.Services.Products.Domain;
 using DShop.Services.Products.Queries;
 using System;
 using System.Threading.Tasks;
