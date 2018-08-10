@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using DShop.Common.AppMetrics;
 using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
@@ -29,12 +30,11 @@ namespace DShop.Services.Products
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddDefaultJsonOptions();
-
+            services.AddCustomMvc();
+            services.AddAppMetrics();
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
-
             builder.Populate(services);
             builder.AddRabbitMq();
             builder.AddMongoDB();
@@ -51,13 +51,13 @@ namespace DShop.Services.Products
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAppMetrics(applicationLifetime);
+            app.UseErrorHandler();
             app.UseMvc();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateProduct>()
                 .SubscribeCommand<UpdateProduct>()
                 .SubscribeCommand<DeleteProduct>();
-
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }
     }
