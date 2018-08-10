@@ -6,7 +6,7 @@ using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
-using DShop.Messages.Commands.Products;
+using DShop.Services.Products.Messages.Commands;
 using DShop.Services.Products.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

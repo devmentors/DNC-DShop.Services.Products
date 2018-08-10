@@ -1,7 +1,7 @@
 ﻿using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
-using DShop.Messages.Commands.Products;
-using DShop.Messages.Events.Products;
+using DShop.Services.Products.Messages.Commands;
+using DShop.Services.Products.Messages.Events;
 using DShop.Services.Products.Domain;
 using DShop.Services.Products.Repositories;
 using System.Threading.Tasks;
@@ -33,11 +33,11 @@ namespace DShop.Services.Products.Handlers
                 })
                 .OnSuccess(async () =>
                 {
-                    await _busPublisher.PublishEventAsync(new ProductCreated(command.Id), context);
+                    await _busPublisher.PublishAsync(new ProductCreated(command.Id), context);
                 })
                 .OnDShopError(async Exception => 
                 {
-                    await _busPublisher.PublishEventAsync(new UpdateProductRejected(command.Id, Exception.Message, Exception.Code), context);
+                    await _busPublisher.PublishAsync(new UpdateProductRejected(command.Id, Exception.Message, Exception.Code), context);
                 })
                 .ExecuteAsync();        
     }

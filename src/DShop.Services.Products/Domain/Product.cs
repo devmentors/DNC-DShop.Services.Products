@@ -1,5 +1,4 @@
 using DShop.Common.Types;
-using DShop.Messages.Entities;
 using System;
 
 namespace DShop.Services.Products.Domain

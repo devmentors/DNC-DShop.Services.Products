@@ -1,5 +1,5 @@
 ﻿using DShop.Common.Types;
-using DShop.Services.Products.Dtos;
+using DShop.Services.Products.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

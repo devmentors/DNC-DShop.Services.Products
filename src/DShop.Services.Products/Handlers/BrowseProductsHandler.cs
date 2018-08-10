@@ -1,6 +1,6 @@
 ﻿using DShop.Common.Handlers;
 using DShop.Common.Types;
-using DShop.Services.Products.Dtos;
+using DShop.Services.Products.Dto;
 using DShop.Services.Products.Queries;
 using DShop.Services.Products.Repositories;
 using System.Linq;
