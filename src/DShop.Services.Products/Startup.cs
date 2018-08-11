@@ -2,7 +2,6 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using DShop.Common.AppMetrics;
 using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
@@ -31,7 +30,6 @@ namespace DShop.Services.Products
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCustomMvc();
-            services.AddAppMetrics();
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
@@ -51,7 +49,6 @@ namespace DShop.Services.Products
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseAppMetrics(applicationLifetime);
             app.UseErrorHandler();
             app.UseMvc();
             app.UseRabbitMq()
