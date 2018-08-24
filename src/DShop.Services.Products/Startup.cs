@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DShop.Common.Consul;
+using Consul;
 
 namespace DShop.Services.Products
 {
@@ -30,6 +32,7 @@ namespace DShop.Services.Products
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCustomMvc();
+            services.AddConsul();
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
@@ -43,19 +46,26 @@ namespace DShop.Services.Products
             return new AutofacServiceProvider(Container);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+            IApplicationLifetime applicationLifetime, IConsulClient client)
         {
             if (env.IsDevelopment() || env.EnvironmentName == "local")
             {
                 app.UseDeveloperExceptionPage();
             }
             app.UseErrorHandler();
+            app.UseServiceId();
             app.UseMvc();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateProduct>()
                 .SubscribeCommand<UpdateProduct>()
                 .SubscribeCommand<DeleteProduct>();
-            applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
+            var consulServiceId = app.UseConsul();
+            applicationLifetime.ApplicationStopped.Register(() => 
+            { 
+                client.Agent.ServiceDeregister(consulServiceId); 
+                Container.Dispose(); 
+            });
         }
     }
 }
