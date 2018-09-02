@@ -6,6 +6,7 @@ using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
+using DShop.Common.Swagger;
 using DShop.Services.Products.Messages.Commands;
 using DShop.Services.Products.Domain;
 using Microsoft.AspNetCore.Builder;
@@ -32,14 +33,15 @@ namespace DShop.Services.Products
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCustomMvc();
+            services.AddSwaggerDocs();
             services.AddConsul();
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
             builder.Populate(services);
             builder.AddRabbitMq();
-            builder.AddMongoDB();
-            builder.AddMongoDBRepository<Product>("Products");
+            builder.AddMongo();
+            builder.AddMongoRepository<Product>("Products");
             builder.AddDispatchers();
 
             Container = builder.Build();
@@ -53,6 +55,8 @@ namespace DShop.Services.Products
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAllForwardedHeaders();
+            app.UseSwaggerDocs();
             app.UseErrorHandler();
             app.UseServiceId();
             app.UseMvc();

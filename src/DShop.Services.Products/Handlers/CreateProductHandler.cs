@@ -35,7 +35,7 @@ namespace DShop.Services.Products.Handlers
                 {
                     await _busPublisher.PublishAsync(new ProductCreated(command.Id), context);
                 })
-                .OnDShopError(async Exception => 
+                .OnCustomError(async Exception => 
                 {
                     await _busPublisher.PublishAsync(new UpdateProductRejected(command.Id, Exception.Message, Exception.Code), context);
                 })
