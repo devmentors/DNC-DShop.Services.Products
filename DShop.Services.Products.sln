@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{20A1DDCA-2BE0-4479-A772-307D4012BC3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DShop.Services.Products", "src\DShop.Services.Products\DShop.Services.Products.csproj", "{A933E931-039F-48CA-863D-6523D8C841DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B0C937BB-DB3C-41F4-B13E-B762A803A189}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DShop.Services.Products.Tests", "tests\DShop.Services.Products.Tests\DShop.Services.Products.Tests.csproj", "{030E30E4-3741-4341-8483-C2DE822B1100}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,8 +36,21 @@ Global
 		{A933E931-039F-48CA-863D-6523D8C841DC}.Release|x64.Build.0 = Release|x64
 		{A933E931-039F-48CA-863D-6523D8C841DC}.Release|x86.ActiveCfg = Release|x86
 		{A933E931-039F-48CA-863D-6523D8C841DC}.Release|x86.Build.0 = Release|x86
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Debug|x64.Build.0 = Debug|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Debug|x86.Build.0 = Debug|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Release|x64.ActiveCfg = Release|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Release|x64.Build.0 = Release|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Release|x86.ActiveCfg = Release|Any CPU
+		{030E30E4-3741-4341-8483-C2DE822B1100}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A933E931-039F-48CA-863D-6523D8C841DC} = {20A1DDCA-2BE0-4479-A772-307D4012BC3D}
+		{030E30E4-3741-4341-8483-C2DE822B1100} = {B0C937BB-DB3C-41F4-B13E-B762A803A189}
 	EndGlobalSection
 EndGlobal
