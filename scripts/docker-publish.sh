@@ -14,6 +14,6 @@ case "$TRAVIS_BRANCH" in
 esac
 
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-docker build -f ./src/DShop.Services.Products/Dockerfile.$DOCKER_ENV -t dshop.services.products:$DOCKER_TAG ./src/DShop.Services.Products
+docker build -t dshop.services.products:$DOCKER_TAG .
 docker tag dshop.services.products:$DOCKER_TAG $DOCKER_USERNAME/dshop.services.products:$DOCKER_TAG
 docker push $DOCKER_USERNAME/dshop.services.products:$DOCKER_TAG
