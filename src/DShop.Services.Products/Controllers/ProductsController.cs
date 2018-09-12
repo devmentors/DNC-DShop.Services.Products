@@ -17,10 +17,10 @@ namespace DShop.Services.Products.Controllers
 
         [HttpGet]
         public async Task<ActionResult<PagedResult<ProductDto>>> Get([FromQuery] BrowseProducts query)
-            => Collection(await QueryAsync<BrowseProducts, PagedResult<ProductDto>>(query));
+            => Collection(await QueryAsync(query));
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetAsync([FromRoute] GetProduct query)
-            => Single(await QueryAsync<GetProduct, ProductDto>(query));
+            => Single(await QueryAsync(query));
     }
 }

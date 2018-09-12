@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.Consul;
 using Consul;
+using DShop.Common.Handlers;
 
 namespace DShop.Services.Products
 {
