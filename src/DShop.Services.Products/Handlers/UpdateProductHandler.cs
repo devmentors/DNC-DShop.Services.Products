@@ -30,22 +30,26 @@ namespace DShop.Services.Products.Handlers
                 .Handle(async () =>
                 {
                     var product = await _productsRepository.GetAsync(command.Id);
-
                     if (product == null)
                     {
-                        throw new DShopException("Product does not exist.");
+                        throw new DShopException("product_not_found",
+                            $"Product with id: '{command.Id}' was not found.");
                     }
-
                     product.SetName(command.Name);
                     product.SetDescription(command.Description);
                     product.SetPrice(command.Price);
-
                     await _productsRepository.UpdateAsync(product);
                 })
-                .OnSuccess(async () =>
-                {
-                    await _busPublisher.PublishAsync(new ProductUpdated(command.Id), context);
-                })
+                .OnSuccess(async () => await _busPublisher.PublishAsync(
+                    new ProductUpdated(command.Id, command.Name, command.Description, command.Price),
+                        context)
+                )
+                .OnCustomError(async ex => await _busPublisher.PublishAsync(
+                    new UpdateProductRejected(command.Id, ex.Message, ex.Code), context)
+                )
+                .OnError(async ex => await _busPublisher.PublishAsync(
+                    new UpdateProductRejected(command.Id, ex.Message, "update_product_failed"), context)
+                )
                 .ExecuteAsync();
     }
 }

@@ -5,16 +5,16 @@ namespace DShop.Services.Products.Domain
 {
     public class Product : BaseEntity
     {
-        public string Name { get; protected set; }
-        public string Description { get; protected set; }
-        public string Vendor { get; protected set; }
-        public decimal Price { get; protected set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public string Vendor { get; private set; }
+        public decimal Price { get; private set; }
 
         public Product(Guid id, string name, string description, string vendor, decimal price)
-            :base(id)
+            : base(id)
         {
-            Vendor = vendor;
-            SetName(name); 
+            SetName(name);
+            SetVendor(vendor);
             SetDescription(description);
             SetPrice(price);
         }
@@ -23,10 +23,23 @@ namespace DShop.Services.Products.Domain
         {
             if(string.IsNullOrEmpty(name))
             {
-                throw new DShopException("Product name cannot be empty.");
+                throw new DShopException("empty_product_name", 
+                    "Product name cannot be empty.");
             }
 
-            Name = name;
+            Name = name.Trim().ToLowerInvariant();
+            SetUpdatedDate();
+        }
+
+        public void SetVendor(string vendor)
+        {
+            if(string.IsNullOrEmpty(vendor))
+            {
+                throw new DShopException("empty_product_vendor", 
+                    "Product vendor cannot be empty.");
+            }
+
+            Vendor = vendor.Trim().ToLowerInvariant();
             SetUpdatedDate();
         }
 
@@ -34,10 +47,11 @@ namespace DShop.Services.Products.Domain
         {
             if (string.IsNullOrEmpty(description))
             {
-                throw new DShopException("Product description cannot be empty.");
+                throw new DShopException("empty_product_description",
+                    "Product description cannot be empty.");
             }
 
-            Description = description;
+            Description = description.Trim();
             SetUpdatedDate();
         }
 
@@ -46,7 +60,8 @@ namespace DShop.Services.Products.Domain
         {
             if (price <= 0)
             {
-                throw new DShopException("Product price cannot be zero or negative.");
+                throw new DShopException("invalid_product_price",
+                    "Product price cannot be zero or negative.");
             }
 
             Price = price;

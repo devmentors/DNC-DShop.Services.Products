@@ -12,7 +12,8 @@ namespace DShop.Services.Products.Messages.Commands
         public decimal Price { get; }
 
         [JsonConstructor]
-        public UpdateProduct(Guid id, string name, string description, string vendor, decimal price)
+        public UpdateProduct(Guid id, string name, 
+            string description, decimal price)
         {
             Id = id;
             Name = name;

@@ -5,6 +5,7 @@ using DShop.Services.Products.Messages.Events;
 using DShop.Services.Products.Domain;
 using DShop.Services.Products.Repositories;
 using System.Threading.Tasks;
+using DShop.Common.Types;
 
 namespace DShop.Services.Products.Handlers
 {
@@ -28,17 +29,25 @@ namespace DShop.Services.Products.Handlers
             => await _handler
                 .Handle(async () =>
                 {
-                    var product = new Product(command.Id, command.Name, command.Description, command.Vendor, command.Price);
-                    await _productsRepository.CreateAsync(product);
+                    if (await _productsRepository.ExistsAsync(command.Name))
+                    {   
+                        throw new DShopException("product_already_exists",
+                            $"Product: '{command.Name}' already exists.");
+                    }
+                    var product = new Product(command.Id, command.Name, 
+                        command.Description, command.Vendor, command.Price);
+                    await _productsRepository.AddAsync(product);
                 })
-                .OnSuccess(async () =>
-                {
-                    await _busPublisher.PublishAsync(new ProductCreated(command.Id), context);
-                })
-                .OnCustomError(async Exception => 
-                {
-                    await _busPublisher.PublishAsync(new UpdateProductRejected(command.Id, Exception.Message, Exception.Code), context);
-                })
+                .OnSuccess(async () => await _busPublisher.PublishAsync(
+                    new ProductCreated(command.Id, command.Name, command.Description, command.Vendor, command.Price),
+                        context)
+                )
+                .OnCustomError(async ex => await _busPublisher.PublishAsync(
+                    new CreateProductRejected(command.Id, ex.Message, ex.Code), context)
+                )
+                .OnError(async ex => await _busPublisher.PublishAsync(
+                    new CreateProductRejected(command.Id, ex.Message, "create_product_failed"), context)
+                )
                 .ExecuteAsync();        
     }
 }

@@ -23,16 +23,14 @@ namespace DShop.Services.Products
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public IContainer Container { get; private set; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-        public IContainer Container { get; private set; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCustomMvc();
@@ -51,6 +49,7 @@ namespace DShop.Services.Products
             builder.AddDispatchers();
 
             Container = builder.Build();
+            
             return new AutofacServiceProvider(Container);
         }
 
