@@ -11,39 +11,26 @@ namespace DShop.Services.Products.Handlers
     public sealed class DeleteProductHandler : ICommandHandler<DeleteProduct>
     {
         private readonly IProductsRepository _productsRepository;
-        private readonly IHandler _handler;
         private readonly IBusPublisher _busPublisher;
 
         public DeleteProductHandler(
             IProductsRepository productsRepository,
-            IHandler handler,
             IBusPublisher busPublisher)
         {
             _productsRepository = productsRepository;
-            _handler = handler;
             _busPublisher = busPublisher;
         }
 
         public async Task HandleAsync(DeleteProduct command, ICorrelationContext context)
-            => await _handler
-                .Handle(async () =>
-                {
-                    if (!await _productsRepository.ExistsAsync(command.Id))
-                    {   
-                        throw new DShopException("product_not_found",
-                            $"Product with id: '{command.Id}' was not found.");
-                    }
-                    await _productsRepository.DeleteAsync(command.Id);
-                })
-                .OnSuccess(async () => await _busPublisher.PublishAsync(
-                    new ProductDeleted(command.Id), context)
-                )
-                .OnCustomError(async ex => await _busPublisher.PublishAsync(
-                    new DeleteProductRejected(command.Id, ex.Message, ex.Code), context)
-                )
-                .OnError(async ex => await _busPublisher.PublishAsync(
-                    new DeleteProductRejected(command.Id, ex.Message, "delete_product_failed"), context)
-                )
-                .ExecuteAsync();
+        {
+            if (!await _productsRepository.ExistsAsync(command.Id))
+            {
+                throw new DShopException("product_not_found",
+                    $"Product with id: '{command.Id}' was not found.");
+            }
+
+            await _productsRepository.DeleteAsync(command.Id);
+            await _busPublisher.PublishAsync(new ProductDeleted(command.Id), context);
+        }
     }
 }

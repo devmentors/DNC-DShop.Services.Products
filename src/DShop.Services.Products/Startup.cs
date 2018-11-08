@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.Consul;
 using Consul;
-using DShop.Common.Handlers;
+using DShop.Services.Products.Messages.Events;
 
 namespace DShop.Services.Products
 {
@@ -41,7 +41,7 @@ namespace DShop.Services.Products
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
-                    .AsImplementedInterfaces();
+                .AsImplementedInterfaces();
             builder.Populate(services);
             builder.AddRabbitMq();
             builder.AddMongo();
@@ -49,11 +49,11 @@ namespace DShop.Services.Products
             builder.AddDispatchers();
 
             Container = builder.Build();
-            
+
             return new AutofacServiceProvider(Container);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             IApplicationLifetime applicationLifetime, IConsulClient client,
             IStartupInitializer startupInitializer)
         {
@@ -61,22 +61,25 @@ namespace DShop.Services.Products
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseAllForwardedHeaders();
             app.UseSwaggerDocs();
             app.UseErrorHandler();
             app.UseServiceId();
             app.UseMvc();
             app.UseRabbitMq()
-                .SubscribeCommand<CreateProduct>()
-                .SubscribeCommand<UpdateProduct>()
-                .SubscribeCommand<DeleteProduct>();
+                .SubscribeCommand<CreateProduct>(onError: (c, e) =>
+                    new CreateProductRejected(c.Id, e.Message, e.Code))
+                .SubscribeCommand<UpdateProduct>(onError: (c, e) =>
+                    new UpdateProductRejected(c.Id, e.Message, e.Code))
+                .SubscribeCommand<DeleteProduct>(onError: (c, e) =>
+                    new DeleteProductRejected(c.Id, e.Message, e.Code));
 
             var consulServiceId = app.UseConsul();
-            applicationLifetime.ApplicationStopped.Register(() => 
-            { 
-                client.Agent.ServiceDeregister(consulServiceId); 
-                Container.Dispose(); 
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                client.Agent.ServiceDeregister(consulServiceId);
+                Container.Dispose();
             });
 
             startupInitializer.InitializeAsync();

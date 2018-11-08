@@ -1,21 +1,15 @@
-﻿using DShop.Common.Handlers;
-using DShop.Common.Mongo;
+﻿using System;
+using System.Threading.Tasks;
+using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
-using DShop.Common.Types;
-using DShop.Services.Products.Domain;
 using DShop.Services.Products.Handlers;
 using DShop.Services.Products.Messages.Commands;
 using DShop.Services.Products.Messages.Events;
 using DShop.Services.Products.Repositories;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace DShop.Services.Products.UnitTests.Handlers
+namespace DShop.Services.Products.Tests.Handlers
 {
     public class CreateProductHandlerTests
     {
@@ -28,11 +22,12 @@ namespace DShop.Services.Products.UnitTests.Handlers
         private CreateProduct _command => new CreateProduct(
             _id, _name, _description, _vendor, _price);
 
-        public async Task Act(CreateProduct command)
+        private async Task Act(CreateProduct command)
             => await _commandHandler.HandleAsync(command, _context);
 
         [Fact]
-        public async Task HandleAsync_Publishes_CreateProductRejected_If_Prodcut_With_Given_Name_Already_Exists()
+
+        public async Task handle_async_published_create_product_rejecte_if_product_with_given_name_already_exists()
         {
             _productsRepository
                 .ExistsAsync(_command.Name)
@@ -48,12 +43,11 @@ namespace DShop.Services.Products.UnitTests.Handlers
                     && e.Reason == $"Product: '{_command.Name}' already exists."), _context);
         }
 
-#region ARRANGE
+        #region ARRANGE
 
         private readonly IProductsRepository _productsRepository;
         private readonly IBusPublisher _busPublisher;
         private readonly ICorrelationContext _context;
-        private readonly IHandler _handler;
         private readonly CreateProductHandler _commandHandler;
 
         public CreateProductHandlerTests()
@@ -61,11 +55,11 @@ namespace DShop.Services.Products.UnitTests.Handlers
             _productsRepository = Substitute.For<IProductsRepository>();
             _busPublisher = Substitute.For<IBusPublisher>();
             _context = Substitute.For<ICorrelationContext>();
-            _handler = new Handler();
 
-            _commandHandler = new CreateProductHandler(_productsRepository, _handler, _busPublisher);
+            _commandHandler = new CreateProductHandler(_productsRepository, _busPublisher);
+            _commandHandler = new CreateProductHandler(_productsRepository, _busPublisher);
         }
 
-#endregion
+        #endregion
     }
 }
