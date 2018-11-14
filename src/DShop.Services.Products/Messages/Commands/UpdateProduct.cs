@@ -4,21 +4,24 @@ using System;
 
 namespace DShop.Services.Products.Messages.Commands
 {
-	public class UpdateProduct : ICommand
-	{
+    public class UpdateProduct : ICommand
+    {
         public Guid Id { get; }
         public string Name { get; }
         public string Description { get; }
         public decimal Price { get; }
+        public int Quantity { get; }
 
         [JsonConstructor]
-        public UpdateProduct(Guid id, string name, 
-            string description, decimal price)
+        public UpdateProduct(Guid id, string name,
+            string description, decimal price,
+            int quantity)
         {
             Id = id;
             Name = name;
             Description = description;
             Price = price;
+            Quantity = quantity;
         }
     }
 }

@@ -17,7 +17,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.Consul;
 using Consul;
+using DShop.Common.RestEase;
 using DShop.Services.Products.Messages.Events;
+using DShop.Services.Products.Services;
 
 namespace DShop.Services.Products
 {
@@ -38,6 +40,7 @@ namespace DShop.Services.Products
             services.AddConsul();
             services.AddRedis();
             services.AddInitializers(typeof(IMongoDbInitializer));
+            services.RegisterServiceForwarder<IOrdersService>("orders-service");
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
@@ -73,7 +76,9 @@ namespace DShop.Services.Products
                 .SubscribeCommand<UpdateProduct>(onError: (c, e) =>
                     new UpdateProductRejected(c.Id, e.Message, e.Code))
                 .SubscribeCommand<DeleteProduct>(onError: (c, e) =>
-                    new DeleteProductRejected(c.Id, e.Message, e.Code));
+                    new DeleteProductRejected(c.Id, e.Message, e.Code))
+                .SubscribeEvent<OrderCreated>(@namespace: "orders")
+                .SubscribeEvent<OrderCanceled>(@namespace: "orders");
 
             var consulServiceId = app.UseConsul();
             applicationLifetime.ApplicationStopped.Register(() =>

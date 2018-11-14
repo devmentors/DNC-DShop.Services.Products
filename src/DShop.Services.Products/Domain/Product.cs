@@ -9,14 +9,17 @@ namespace DShop.Services.Products.Domain
         public string Description { get; private set; }
         public string Vendor { get; private set; }
         public decimal Price { get; private set; }
+        public int Quantity { get; private set; }
 
-        public Product(Guid id, string name, string description, string vendor, decimal price)
+        public Product(Guid id, string name, string description, string vendor,
+            decimal price, int quantity)
             : base(id)
         {
             SetName(name);
             SetVendor(vendor);
             SetDescription(description);
             SetPrice(price);
+            SetQuantity(quantity);
         }
 
         public void SetName(string name)
@@ -65,6 +68,18 @@ namespace DShop.Services.Products.Domain
             }
 
             Price = price;
+            SetUpdatedDate();
+        }
+
+        public void SetQuantity(int quantity)
+        {
+            if (quantity < 0)
+            {
+                throw new DShopException("invalid_product_quantity",
+                    "Product quantity cannot be negative.");
+            }
+
+            Quantity = quantity;
             SetUpdatedDate();
         }
     }

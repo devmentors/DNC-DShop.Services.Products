@@ -24,7 +24,8 @@ namespace DShop.Services.Products.Handlers
                 Name = p.Name,
                 Description = p.Description,
                 Vendor = p.Vendor,
-                Price = p.Price
+                Price = p.Price,
+                Quantity = p.Quantity
             }).ToList();
 
             return PagedResult<ProductDto>.From(pagedResult, products);

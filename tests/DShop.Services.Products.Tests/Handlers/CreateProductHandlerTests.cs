@@ -18,9 +18,10 @@ namespace DShop.Services.Products.Tests.Handlers
         private string _description => "description";
         private string _vendor => "vendor";
         private decimal _price => 10m;
+        private int _quantity = 10;
 
         private CreateProduct _command => new CreateProduct(
-            _id, _name, _description, _vendor, _price);
+            _id, _name, _description, _vendor, _price, _quantity);
 
         private async Task Act(CreateProduct command)
             => await _commandHandler.HandleAsync(command, _context);

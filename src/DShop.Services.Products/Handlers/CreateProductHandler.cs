@@ -24,6 +24,12 @@ namespace DShop.Services.Products.Handlers
 
         public async Task HandleAsync(CreateProduct command, ICorrelationContext context)
         {
+            if (command.Quantity < 0)
+            {
+                throw new DShopException("invalid_product_quantity",
+                    "Product quantity cannot be negative.");
+            }
+
             if (await _productsRepository.ExistsAsync(command.Name))
             {
                 throw new DShopException("product_already_exists",
@@ -31,10 +37,10 @@ namespace DShop.Services.Products.Handlers
             }
 
             var product = new Product(command.Id, command.Name,
-                command.Description, command.Vendor, command.Price);
+                command.Description, command.Vendor, command.Price, command.Quantity);
             await _productsRepository.AddAsync(product);
             await _busPublisher.PublishAsync(new ProductCreated(command.Id, command.Name,
-                command.Description, command.Vendor, command.Price), context);
+                command.Description, command.Vendor, command.Price, command.Quantity), context);
         }
     }
 }
