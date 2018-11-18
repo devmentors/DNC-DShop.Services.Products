@@ -32,11 +32,12 @@ namespace DShop.Services.Products.Handlers
 
             product.SetName(command.Name);
             product.SetDescription(command.Description);
+            product.SetVendor(command.Vendor);
             product.SetPrice(command.Price);
             product.SetQuantity(command.Quantity);
             await _productsRepository.UpdateAsync(product);
             await _busPublisher.PublishAsync(new ProductUpdated(command.Id, command.Name,
-                command.Description, command.Price, command.Quantity), context);
+                command.Description, command.Vendor, command.Price, command.Quantity), context);
         }
     }
 }
