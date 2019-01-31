@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.Consul;
 using Consul;
+using DShop.Common.Jaeger;
 using DShop.Services.Products.Messages.Events;
 
 namespace DShop.Services.Products
@@ -36,6 +37,8 @@ namespace DShop.Services.Products
             services.AddCustomMvc();
             services.AddSwaggerDocs();
             services.AddConsul();
+            services.AddJaeger();
+            services.AddOpenTracing();
             services.AddRedis();
             services.AddInitializers(typeof(IMongoDbInitializer));
 
